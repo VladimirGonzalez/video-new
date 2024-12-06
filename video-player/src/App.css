@@ -1,0 +1,65 @@
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Deshabilita el scroll */
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.video-player {
+  width: 100%;
+  height: auto;
+  max-width: 1920px;
+  max-height: 1080px;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 5px; /* Tamaño ligeramente más grande */
+  background-color: rgba(255, 255, 255, 0.6); /* Color translúcido, un poco más visible */
+  transition: width 0.1s linear;
+}
+
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 500px;
+  padding: 20px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.qr-code {
+  margin: 10px 0;
+}
+
+.portfolio-link,
+.linkedin-link {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #007aff;
+  text-decoration: none;
+}
+
+.portfolio-link:hover,
+.linkedin-link:hover {
+  text-decoration: underline;
+}
