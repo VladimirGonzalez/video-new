@@ -167,7 +167,8 @@ function App() {
       {/* Video Parnor */}
       {currentContent === 'parnor-video' && (
         <div className="video-container">
-          <video ref={parnorVideoRef} autoPlay muted className="video-player">
+          <video ref={parnorVideoRef} autoPlay className="video-player">
+            {/* Eliminado muted para habilitar el audio */}
             <source src="/parnor.mp4" type="video/mp4" />
             Tu navegador no soporta la reproducción de videos.
           </video>
