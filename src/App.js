@@ -7,15 +7,17 @@ function App() {
   const [progress, setProgress] = useState(0); // Estado de la barra de progreso
   const sponsorsVideoRef = useRef(null); // Referencia al video de sponsors
   const hospitalVideoRef = useRef(null); // Referencia al video del hospital
+  const parnorVideoRef = useRef(null); // Referencia al video parnor
   const sponsorStartTime = 82.25; // Tiempo de inicio en segundos (1:22.06)
 
-  // Maneja las teclas para alternar contenido y controlar los videos
+  // Manejo de teclas
   useEffect(() => {
     const handleKeyPress = (event) => {
       const sponsorsVideo = sponsorsVideoRef.current;
       const hospitalVideo = hospitalVideoRef.current;
+      const parnorVideo = parnorVideoRef.current;
 
-      // Alternar contenido
+      // Cambiar contenido según la tecla
       if (!event.target.matches('input, textarea')) {
         switch (event.key) {
           case '1':
@@ -23,22 +25,30 @@ function App() {
             break;
           case '2':
             if (currentContent === 'sponsors-video' && sponsorsVideo) {
-              sponsorsVideo.currentTime = 0; // Reinicia desde el principio
+              sponsorsVideo.currentTime = 0;
               sponsorsVideo.play();
             } else {
               setCurrentContent('sponsors-video');
             }
             break;
           case '3':
-            if (currentContent === 'hospital-merendero1' && hospitalVideo) {
-              hospitalVideo.currentTime = 0; // Reinicia desde el principio
+            if (currentContent === 'hospital-merendero' && hospitalVideo) {
+              hospitalVideo.currentTime = 0;
               hospitalVideo.play();
             } else {
-              setCurrentContent('hospital-merendero1');
+              setCurrentContent('hospital-merendero');
             }
             break;
           case '4':
             setCurrentContent('contact');
+            break;
+          case '5':
+            if (currentContent === 'parnor-video' && parnorVideo) {
+              parnorVideo.currentTime = 0;
+              parnorVideo.play();
+            } else {
+              setCurrentContent('parnor-video');
+            }
             break;
           default:
             break;
@@ -49,19 +59,17 @@ function App() {
       const video =
         currentContent === 'sponsors-video'
           ? sponsorsVideo
-          : currentContent === 'hospital-merendero1'
+          : currentContent === 'hospital-merendero'
             ? hospitalVideo
-            : null;
+            : currentContent === 'parnor-video'
+              ? parnorVideo
+              : null;
 
       if (video) {
         switch (event.key) {
           case ' ':
-            event.preventDefault(); // Evita el scroll al presionar espacio
-            if (video.paused) {
-              video.play();
-            } else {
-              video.pause();
-            }
+            event.preventDefault();
+            video.paused ? video.play() : video.pause();
             break;
           case 'ArrowRight':
             video.currentTime = Math.min(video.currentTime + 10, video.duration);
@@ -85,19 +93,18 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentContent]);
 
-  // Configura el inicio del video de sponsors en un punto específico al terminar
+  // Configura el inicio del video de sponsors
   useEffect(() => {
     const sponsorsVideo = sponsorsVideoRef.current;
 
     if (currentContent === 'sponsors-video' && sponsorsVideo) {
       const handleEnded = () => {
-        sponsorsVideo.currentTime = sponsorStartTime; // Reinicia desde el tiempo de los logos
-        sponsorsVideo.play(); // Reanuda la reproducción
+        sponsorsVideo.currentTime = sponsorStartTime;
+        sponsorsVideo.play();
       };
 
-      sponsorsVideo.addEventListener('ended', handleEnded); // Detecta el fin del video
-      return () =>
-        sponsorsVideo.removeEventListener('ended', handleEnded);
+      sponsorsVideo.addEventListener('ended', handleEnded);
+      return () => sponsorsVideo.removeEventListener('ended', handleEnded);
     }
   }, [currentContent]);
 
@@ -106,9 +113,11 @@ function App() {
     const video =
       currentContent === 'sponsors-video'
         ? sponsorsVideoRef.current
-        : currentContent === 'hospital-merendero1'
+        : currentContent === 'hospital-merendero'
           ? hospitalVideoRef.current
-          : null;
+          : currentContent === 'parnor-video'
+            ? parnorVideoRef.current
+            : null;
 
     if (video) {
       const updateProgress = () => {
@@ -123,51 +132,46 @@ function App() {
 
   return (
     <div className="App">
-      {/* Imagen del logo del ITC */}
+      {/* Logo ITC */}
       {currentContent === 'logo-itc' && (
-        <img
-          src="/logo-itc.png"
-          alt="Logo ITC"
-          className="background-image"
-        />
+        <img src="/logo-itc.png" alt="Logo ITC" className="background-image" />
       )}
 
-      {/* Video de sponsors */}
+      {/* Video de Sponsors */}
       {currentContent === 'sponsors-video' && (
         <div className="video-container">
-          <video
-            ref={sponsorsVideoRef}
-            autoPlay
-            muted
-            className="video-player"
-          >
+          <video ref={sponsorsVideoRef} autoPlay muted className="video-player">
             <source src="/sponsors1.mp4" type="video/mp4" />
             Tu navegador no soporta la reproducción de videos.
           </video>
-          <div
-            className="progress-bar"
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
       )}
 
-      {/* Video del Hospital, Merendero y Hogar */}
-      {currentContent === 'hospital-merendero1' && (
+      {/* Video del Hospital */}
+      {currentContent === 'hospital-merendero' && (
         <div className="video-container">
           <video
             ref={hospitalVideoRef}
             autoPlay
             muted
-            loop
             className="video-player"
           >
             <source src="/hospital-merendero1.mp4" type="video/mp4" />
             Tu navegador no soporta la reproducción de videos.
           </video>
-          <div
-            className="progress-bar"
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+        </div>
+      )}
+
+      {/* Video Parnor */}
+      {currentContent === 'parnor-video' && (
+        <div className="video-container">
+          <video ref={parnorVideoRef} autoPlay muted className="video-player">
+            <source src="/parnor.mp4" type="video/mp4" />
+            Tu navegador no soporta la reproducción de videos.
+          </video>
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
       )}
 
